@@ -7,19 +7,18 @@
 
 #include <string>
 
-class TestState : public State
+class TestState final : public State
 {
 public:
-    TestState(sf::RenderWindow& window);
+    explicit TestState(sf::RenderWindow& window);
 
 private:
-    void process_events() final;
-    void update(const sf::Time dt) final;
-    void render() final;
+    void processEvents() override;
+    void update(sf::Time delta_time) override;
+    void render() override;
 
-    void load_resources();
+    void loadResources();
 
-private:
     thor::ResourceHolder<sf::Texture, std::string> m_textures;
     thor::ResourceHolder<sf::Font, std::string> m_fonts;
 

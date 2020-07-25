@@ -1,29 +1,29 @@
 #include "TestState.hpp"
 
 TestState::TestState(sf::RenderWindow& window)
-: State{window}
+    : State{window}
 {
-    load_resources();
+    loadResources();
 
     m_ent.texture(m_textures["test"]);
 }
 
-void TestState::process_events()
+void TestState::processEvents()
 {
-    sf::Event event;
-
-    while(m_window.pollEvent(event))
+    for (auto event = sf::Event{}; m_window.pollEvent(event);)
     {
-        if(event.type == sf::Event::Closed)
+        if (event.type == sf::Event::Closed)
+        {
             m_window.close();
+        }
     }
 }
 
-void TestState::update(const sf::Time dt)
+void TestState::update(const sf::Time delta_time)
 {
-    process_events();
+    processEvents();
 
-    m_ent.update(dt);
+    m_ent.update(delta_time);
 }
 
 void TestState::render()
@@ -33,7 +33,7 @@ void TestState::render()
     m_window.display();
 }
 
-void TestState::load_resources()
+void TestState::loadResources()
 {
     m_textures.acquire("test", thor::Resources::fromFile<sf::Texture>("test.png"));
 }

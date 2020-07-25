@@ -9,7 +9,7 @@
 class Animation
 {
 public:
-    Animation(const std::string& filename);
+    explicit Animation(const std::string& filename);
 
     thor::Animator<sf::Sprite, std::string>& animator();
 
@@ -19,7 +19,6 @@ protected:
 private:
     void parse(const std::string& filename);
 
-private:
     thor::AnimationMap<sf::Sprite, std::string> m_map;
     std::vector<thor::FrameAnimation> m_animations;
 };

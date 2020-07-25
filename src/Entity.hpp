@@ -7,6 +7,5 @@ class Entity : public sf::Drawable, public sf::Transformable
 public:
     virtual ~Entity() = default;
 
-    virtual void update(sf::Time dt) = 0;
-
+    virtual void update(sf::Time delta_time) = 0;
 };

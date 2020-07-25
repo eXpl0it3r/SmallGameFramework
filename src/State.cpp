@@ -1,23 +1,21 @@
 #include "State.hpp"
 
 State::State(sf::RenderWindow& window)
-: m_window{window}
+    : m_window{window}
 {
-
 }
 
 std::unique_ptr<State> State::run()
 {
-    sf::Clock clock;
-    sf::Time last_frametime;
-    sf::Time dt;
+    const auto clock = sf::Clock{};
+    auto last_frame_time = sf::Time{};
 
-    while(m_next == nullptr && m_window.isOpen())
+    while (m_next == nullptr && m_window.isOpen())
     {
-        dt = clock.getElapsedTime() - last_frametime;
-        last_frametime = clock.getElapsedTime();
+        const auto delta_time = clock.getElapsedTime() - last_frame_time;
+        last_frame_time = clock.getElapsedTime();
 
-        update(dt);
+        update(delta_time);
         render();
     }
 
