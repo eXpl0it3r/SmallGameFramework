@@ -1,4 +1,4 @@
-#include "Animation.hpp"
+#include "Entity/Animation.hpp"
 
 #include "json.hpp"
 

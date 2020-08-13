@@ -1,7 +1,7 @@
 #pragma once
 
-#include "State.hpp"
-#include "TestEntity.hpp"
+#include "State/State.hpp"
+#include "Entity/TestEntity.hpp"
 
 #include <Thor/Resources.hpp>
 

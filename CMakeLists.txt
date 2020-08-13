@@ -30,15 +30,21 @@ endif()
 include_directories(${THOR_INCLUDE_DIR})
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/External)
 
 # Compile target
 set(SOURCE_FILES
-    src/main.cpp
-    src/Application.cpp
-    src/State.cpp
-    src/TestState.cpp
-    src/Animation.cpp
-    src/TestEntity.cpp)
+    "src/main.cpp"
+    "src/Core/Application.hpp"
+    "src/Core/Application.cpp"
+    "src/State/State.hpp"
+    "src/State/State.cpp"
+    "src/State/TestState.hpp"
+    "src/State/TestState.cpp"
+    "src/Entity/Animation.hpp"
+    "src/Entity/Animation.cpp"
+    "src/Entity/TestEntity.hpp"
+    "src/Entity/TestEntity.cpp")
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
 # Static Runtime

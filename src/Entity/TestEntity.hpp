@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Entity.hpp"
-#include "Animation.hpp"
+#include "Entity/Entity.hpp"
+#include "Entity/Animation.hpp"
 
 #include <Thor/Animations.hpp>
 

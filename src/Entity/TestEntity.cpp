@@ -1,4 +1,4 @@
-#include "TestEntity.hpp"
+#include "Entity/TestEntity.hpp"
 
 TestEntity::TestEntity()
     : Animation{"test.json"}
