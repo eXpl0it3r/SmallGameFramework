@@ -3,7 +3,15 @@
 #include <SFML/Graphics.hpp>
 #include <Thor/Resources.hpp>
 
-const auto FontSpaceGrotesk = std::string{ "SpaceGrotesk" };
+namespace Font
+{
+const auto SpaceGrotesk = std::string{ "SpaceGrotesk" };
+}
+
+namespace Texture
+{
+const auto Explosion = std::string{ "Explosion" };
+}
 
 struct Resources
 {

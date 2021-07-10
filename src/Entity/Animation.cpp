@@ -1,8 +1,8 @@
 #include "Entity/Animation.hpp"
 
-#include "json.hpp"
-
 #include <fstream>
+
+#include "json.hpp"
 
 Animation::Animation(const std::string& filename)
     : m_animator{ m_map }
@@ -10,7 +10,6 @@ Animation::Animation(const std::string& filename)
     parse(filename);
 }
 
-// TODO: Missing error handling regarding JSON
 void Animation::parse(const std::string& filename)
 {
     auto animations = nlohmann::json{};
@@ -28,9 +27,7 @@ void Animation::parse(const std::string& filename)
     }
     catch (std::exception& e)
     {
-        throw std::runtime_error{
-            "The animation file \"" + filename + "\" contains invalid JSON data. Inner exception: " + e.what()
-        };
+        throw std::runtime_error{ "The animation file \"" + filename + "\" contains invalid JSON data. Inner exception: " + e.what() };
     }
 
     for (auto animation = animations.begin(); animation != animations.end(); ++animation)

@@ -1,10 +1,10 @@
 #pragma once
 
-#include <Thor/Animations.hpp>
-#include <SFML/Graphics.hpp>
-
 #include <string>
 #include <vector>
+
+#include <Thor/Animations.hpp>
+#include <SFML/Graphics.hpp>
 
 class Animation
 {

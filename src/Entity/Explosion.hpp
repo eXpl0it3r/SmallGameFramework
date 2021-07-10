@@ -5,14 +5,14 @@
 
 #include <Thor/Animations.hpp>
 
-class TestEntity final : public Entity, public Animation
+class Explosion final : public Entity, public Animation
 {
 public:
-    TestEntity();
+    explicit Explosion(const sf::Texture& texture);
 
-    void texture(const sf::Texture& texture);
+    void update(sf::Time delta_time) override;
 
-    void update(sf::Time dt) override;
+protected:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:

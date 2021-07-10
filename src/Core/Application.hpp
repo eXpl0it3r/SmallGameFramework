@@ -12,7 +12,7 @@ public:
     void run();
 
 private:
-    void loadCommonResources();
+    void loadResources();
 
     sf::RenderWindow m_window;
     Resources m_resources;
