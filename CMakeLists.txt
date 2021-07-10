@@ -8,12 +8,14 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # CMake options
+set(SMALLGAMEFRAMEWORK_STATIC_STD_LIBS FALSE CACHE BOOL "Use statically linked standard/runtime libraries? This option must match the one used for SFML.")
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
-set(CMAKE_VERBOSE_MAKEFILE OFF)
-set(THOR_ROOT "" CACHE PATH "Thor top-level directory")
+
+if(NOT BUILD_SHARED_LIBS)
+    set(SFML_STATIC_LIBRARIES TRUE)
+endif()
 
 # Find SFML
-set(SFML_STATIC_LIBRARIES TRUE)
 find_package(SFML 2.5 COMPONENTS audio graphics REQUIRED)
 
 if(NOT SFML_FOUND)
@@ -21,7 +23,6 @@ if(NOT SFML_FOUND)
 endif()
 
 # Find Thor
-set(THOR_STATIC_LIBRARIES TRUE)
 find_package(Thor REQUIRED)
 
 if(NOT THOR_FOUND)
@@ -54,11 +55,15 @@ set(SOURCE_FILES
 add_executable(SmallGameFramework ${SOURCE_FILES})
 
 # Static Runtime
-if(WIN32 AND MSVC AND ${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.15.0")
-	set_property(TARGET SmallGameFramework PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-    target_compile_options(SmallGameFramework PRIVATE /MP)
-elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static")
+if(SMALLGAMEFRAMEWORK_STATIC_STD_LIBS)
+	if(NOT SFML_STATIC_LIBRARIES)
+		message("\n-> If you check SMALLGAMEFRAMEWORK_STATIC_STD_LIBS, you also need to check SFML_STATIC_LIBRARIES.")
+		message("-> It would lead to multiple runtime environments which results in undefined behavior.\n")
+    elseif(WIN32 AND MSVC AND ${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.15.0")
+	    set_property(TARGET SmallGameFramework PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+    elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+	    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static")
+    endif()
 endif()
 
 # Link libraries

@@ -1,4 +1,7 @@
 #include "Entity/Button.hpp"
+
+#include <cmath>
+
 #include "Core/Resources.hpp"
 
 Button::Button(const std::string& text, const Resources& resources)
