@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Entity/Entity.hpp"
+#include "Entity/Base/Entity.hpp"
 #pragma once
 
 struct Resources;

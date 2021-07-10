@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Entity/Button.hpp"
-#include "State/State.hpp"
+#include "State/Base/State.hpp"
 
 struct Resources;
 

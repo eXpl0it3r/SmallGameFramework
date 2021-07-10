@@ -1,6 +1,6 @@
 #pragma once
 
-#include "State/State.hpp"
+#include "State/Base/State.hpp"
 #include "Entity/Explosion.hpp"
 
 struct Resources;
