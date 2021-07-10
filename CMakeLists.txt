@@ -1,10 +1,11 @@
 cmake_minimum_required(VERSION 3.15)
 
-set(PROJECT_NAME "SmallGameFramework")
-project(${PROJECT_NAME})
+project(SmallGameFramework LANGUAGES CXX)
 
-# SmallGameEngine uses C++17 features
+# SmallGameFramework uses C++17 features
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # CMake options
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
@@ -41,24 +42,30 @@ set(SOURCE_FILES
     "src/State/State.cpp"
     "src/State/TestState.hpp"
     "src/State/TestState.cpp"
+    "src/State/MenuState.hpp"
+    "src/State/MenuState.cpp"
     "src/Entity/Animation.hpp"
     "src/Entity/Animation.cpp"
     "src/Entity/TestEntity.hpp"
-    "src/Entity/TestEntity.cpp")
-add_executable(${PROJECT_NAME} ${SOURCE_FILES})
+    "src/Entity/TestEntity.cpp"
+    "src/Entity/Button.hpp"
+    "src/Entity/Button.cpp"
+    "src/Core/Resources.hpp")
+add_executable(SmallGameFramework ${SOURCE_FILES})
 
 # Static Runtime
 if(WIN32 AND MSVC AND ${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.15.0")
-	set_property(TARGET ${PROJECT_NAME} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+	set_property(TARGET SmallGameFramework PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+    target_compile_options(SmallGameFramework PRIVATE /MP)
 elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static")
 endif()
 
 # Link libraries
-target_link_libraries(${PROJECT_NAME} ${THOR_LIBRARY} sfml-audio sfml-graphics)
+target_link_libraries(SmallGameFramework ${THOR_LIBRARY} sfml-audio sfml-graphics)
 
 # Install executable
-install(TARGETS ${PROJECT_NAME}
+install(TARGETS SmallGameFramework
         RUNTIME DESTINATION .)
 
 # Install game data

@@ -4,10 +4,12 @@
 
 #include <memory>
 
+struct Resources;
+
 class State
 {
 public:
-    explicit State(sf::RenderWindow& window);
+    explicit State(sf::RenderWindow& window, Resources& resources);
     virtual ~State() = default;
 
     State(const State&) = delete;
@@ -24,6 +26,7 @@ protected:
     virtual void render() = 0;
 
     sf::RenderWindow& m_window;
+    Resources& m_resources;
 
     std::unique_ptr<State> m_next;
 };

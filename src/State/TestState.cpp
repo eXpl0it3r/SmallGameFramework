@@ -1,11 +1,10 @@
 #include "State/TestState.hpp"
+#include "Core/Resources.hpp"
 
-TestState::TestState(sf::RenderWindow& window)
-    : State{window}
+TestState::TestState(sf::RenderWindow& window, Resources& resources)
+    : State{ window, resources }
 {
     loadResources();
-
-    m_ent.texture(m_textures["test"]);
 }
 
 void TestState::processEvents()
@@ -33,7 +32,7 @@ void TestState::render()
     m_window.display();
 }
 
-void TestState::loadResources()
+void TestState::loadResources() const
 {
-    m_textures.acquire("test", thor::Resources::fromFile<sf::Texture>("test.png"));
+    m_resources.Textures.acquire("test", thor::Resources::fromFile<sf::Texture>("test.png"));
 }

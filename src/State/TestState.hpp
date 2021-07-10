@@ -3,24 +3,19 @@
 #include "State/State.hpp"
 #include "Entity/TestEntity.hpp"
 
-#include <Thor/Resources.hpp>
-
-#include <string>
+struct Resources;
 
 class TestState final : public State
 {
 public:
-    explicit TestState(sf::RenderWindow& window);
+    explicit TestState(sf::RenderWindow& window, Resources& resources);
 
 private:
     void processEvents() override;
     void update(sf::Time delta_time) override;
     void render() override;
 
-    void loadResources();
-
-    thor::ResourceHolder<sf::Texture, std::string> m_textures;
-    thor::ResourceHolder<sf::Font, std::string> m_fonts;
+    void loadResources() const;
 
     TestEntity m_ent;
 };

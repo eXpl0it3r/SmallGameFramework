@@ -5,7 +5,7 @@
 #include <fstream>
 
 Animation::Animation(const std::string& filename)
-    : m_animator{m_map}
+    : m_animator{ m_map }
 {
     parse(filename);
 }
@@ -15,11 +15,11 @@ void Animation::parse(const std::string& filename)
 {
     auto animations = nlohmann::json{};
 
-    auto file = std::fstream{filename, std::ios::in | std::ios::binary};
+    auto file = std::fstream{ filename, std::ios::in | std::ios::binary };
 
     if (!file.is_open())
     {
-        throw std::runtime_error{"Failed to open animation file \"" + filename + "\"."};
+        throw std::runtime_error{ "Failed to open animation file \"" + filename + "\"." };
     }
 
     try
@@ -39,7 +39,7 @@ void Animation::parse(const std::string& filename)
 
         for (auto& frame : animation.value()["frames"])
         {
-            m_animations.back().addFrame(frame[0], {frame[1], frame[2], frame[3], frame[4]});
+            m_animations.back().addFrame(frame[0], { frame[1], frame[2], frame[3], frame[4] });
         }
 
         m_map.addAnimation(animation.key(), m_animations.back(), sf::seconds(animation.value()["duration"]));

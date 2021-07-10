@@ -1,7 +1,9 @@
 #include "State/State.hpp"
+#include "Core/Resources.hpp"
 
-State::State(sf::RenderWindow& window)
-    : m_window{window}
+State::State(sf::RenderWindow& window, Resources& resources)
+    : m_window{ window }
+    , m_resources{ resources }
 {
 }
 

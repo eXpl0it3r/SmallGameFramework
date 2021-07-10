@@ -2,6 +2,8 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "Core/Resources.hpp"
+
 class Application
 {
 public:
@@ -10,5 +12,8 @@ public:
     void run();
 
 private:
+    void loadCommonResources();
+
     sf::RenderWindow m_window;
+    Resources m_resources;
 };
