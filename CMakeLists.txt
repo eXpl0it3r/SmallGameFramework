@@ -8,8 +8,8 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # CMake options
-set(SMALLGAMEFRAMEWORK_STATIC_STD_LIBS FALSE CACHE BOOL "Use statically linked standard/runtime libraries? This option must match the one used for SFML.")
-set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
+option(SMALLGAMEFRAMEWORK_STATIC_STD_LIBS "Use statically linked standard/runtime libraries? This option must match the one used for SFML." OFF)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 if(NOT BUILD_SHARED_LIBS)
     set(SFML_STATIC_LIBRARIES TRUE)
@@ -60,10 +60,10 @@ if(SMALLGAMEFRAMEWORK_STATIC_STD_LIBS)
 	if(NOT SFML_STATIC_LIBRARIES)
 		message("\n-> If you check SMALLGAMEFRAMEWORK_STATIC_STD_LIBS, you also need to check SFML_STATIC_LIBRARIES.")
 		message("-> It would lead to multiple runtime environments which results in undefined behavior.\n")
-    elseif(WIN32 AND MSVC AND ${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.15.0")
+    elseif(WIN32 AND MSVC)
 	    set_property(TARGET SmallGameFramework PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
     elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-	    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static")
+        target_link_options(SmallGameFramework PRIVATE -static)
     endif()
 endif()
 
