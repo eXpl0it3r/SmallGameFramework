@@ -1,7 +1,8 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include <Thor/Resources.hpp>
+
+#include "Core/ResourceHolder.hpp"
 
 namespace Font
 {
@@ -15,6 +16,6 @@ const auto Explosion = std::string{ "Explosion" };
 
 struct Resources
 {
-    thor::ResourceHolder<sf::Texture, std::string> Textures;
-    thor::ResourceHolder<sf::Font, std::string> Fonts;
+    ResourceHolder<sf::Texture, std::string> Textures;
+    ResourceHolder<sf::Font, std::string> Fonts;
 };

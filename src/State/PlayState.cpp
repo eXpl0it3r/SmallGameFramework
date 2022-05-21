@@ -3,7 +3,7 @@
 
 PlayState::PlayState(sf::RenderWindow& window, Resources& resources)
     : State{ window, resources }
-    , m_explosion{ m_resources.Textures[Texture::Explosion] }
+    , m_explosion{ m_resources.Textures.get(Texture::Explosion) }
 {
 }
 

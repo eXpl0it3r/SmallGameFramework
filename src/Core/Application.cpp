@@ -4,8 +4,8 @@
 
 #include <memory>
 
-Application::Application()
-    : m_window{ { 1024, 768 }, "SmallGameFramework", sf::Style::Titlebar | sf::Style::Close, sf::ContextSettings{ 0, 0, 8 } }
+Application::Application() :
+    m_window{ { 1024u, 768u }, "SmallGameFramework", sf::Style::Titlebar | sf::Style::Close, sf::ContextSettings{ 0, 0, 8 } }
 {
     m_window.setVerticalSyncEnabled(true);
 }
@@ -25,6 +25,6 @@ void Application::run()
 
 void Application::loadResources()
 {
-    m_resources.Fonts.acquire(Font::SpaceGrotesk, thor::Resources::fromFile<sf::Font>("SpaceGrotesk-Regular.ttf"));
-    m_resources.Textures.acquire(Texture::Explosion, thor::Resources::fromFile<sf::Texture>("explosion.png"));
+    m_resources.Fonts.load(Font::SpaceGrotesk, "SpaceGrotesk-Regular.ttf");
+    m_resources.Textures.load(Texture::Explosion, "explosion.png");
 }
