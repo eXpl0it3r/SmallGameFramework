@@ -1,6 +1,17 @@
 name: CI
 
-on: [push, pull_request]
+on: [push, pull_request, workflow_dispatch]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
 
 jobs:
   build:
@@ -11,11 +22,10 @@ jobs:
       fail-fast: false
       matrix:
         platform:
-        - { name: Windows VS2019, os: windows-2019   }
-        - { name: Windows VS2022, os: windows-2022 }
-        - { name: Linux GCC,      os: ubuntu-latest  }
-        - { name: Linux Clang,    os: ubuntu-latest, flags: -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ }
-        - { name: MacOS XCode,    os: macos-latest   }
+        - { name: Windows VS2026, os: windows-2025 }
+        - { name: Linux GCC,      os: ubuntu-26.04 }
+        - { name: Linux Clang,    os: ubuntu-26.04, flags: -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ }
+        - { name: macOS Xcode,    os: macos-26 }
         config:
         - { name: Shared, flags: -DBUILD_SHARED_LIBS=TRUE -DTHOR_SHARED_LIBS=TRUE }
         - { name: Static, flags: -DBUILD_SHARED_LIBS=FALSE -DTHOR_SHARED_LIBS=FALSE }
@@ -23,44 +33,48 @@ jobs:
     steps:
     - name: Install Linux Dependencies
       if: runner.os == 'Linux'
-      run: sudo apt-get update && sudo apt-get install libxrandr-dev libxcursor-dev libudev-dev libopenal-dev libflac-dev libvorbis-dev libgl1-mesa-dev libegl1-mesa-dev
+      run: sudo apt-get update && sudo apt-get install libx11-dev libfreetype-dev libxrandr-dev libxcursor-dev libudev-dev libopenal-dev libflac-dev libvorbis-dev libgl1-mesa-dev libegl1-mesa-dev
 
     - name: SmallGameFramework - Checkout Code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v7
+      with:
+        persist-credentials: false
 
     - name: SFML - Checkout Code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v7
       with:
         repository: SFML/SFML
         path: SFML
         ref: 2.6.x
+        persist-credentials: false
 
     - name: SFML - Configure CMake
-      shell: bash
-      run: cmake -S $GITHUB_WORKSPACE/SFML -B $GITHUB_WORKSPACE/SFML/build -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/SFML/install -DCMAKE_VERBOSE_MAKEFILE=ON ${{matrix.platform.flags}} ${{matrix.config.flags}}
+      env:
+        CMAKE_FLAGS: ${{ matrix.platform.flags }} ${{ matrix.config.flags }}
+      run: cmake -S "$GITHUB_WORKSPACE/SFML" -B "$GITHUB_WORKSPACE/SFML/build" -DCMAKE_INSTALL_PREFIX="$GITHUB_WORKSPACE/SFML/install" -DCMAKE_VERBOSE_MAKEFILE=ON $CMAKE_FLAGS
 
     - name: SFML - Build
-      shell: bash
-      run: cmake --build $GITHUB_WORKSPACE/SFML/build --config Release --target install
+      run: cmake --build "$GITHUB_WORKSPACE/SFML/build" --config Release --target install
 
     - name: Thor - Checkout Code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v7
       with:
         repository: Bromeon/Thor
         path: Thor
+        persist-credentials: false
 
     - name: Thor - Configure CMake
-      shell: bash
-      run: cmake -S $GITHUB_WORKSPACE/Thor -B $GITHUB_WORKSPACE/Thor/build -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/Thor/install -DCMAKE_VERBOSE_MAKEFILE=ON -DSFML_DIR=$GITHUB_WORKSPACE/SFML/install/lib/cmake/SFML ${{matrix.platform.flags}} ${{matrix.config.flags}}
+      env:
+        CMAKE_FLAGS: ${{ matrix.platform.flags }} ${{ matrix.config.flags }}
+      run: cmake -S "$GITHUB_WORKSPACE/Thor" -B "$GITHUB_WORKSPACE/Thor/build" -DCMAKE_INSTALL_PREFIX="$GITHUB_WORKSPACE/Thor/install" -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_VERBOSE_MAKEFILE=ON -DSFML_DIR="$GITHUB_WORKSPACE/SFML/install/lib/cmake/SFML" $CMAKE_FLAGS
 
     - name: Thor - Build
-      shell: bash
-      run: cmake --build $GITHUB_WORKSPACE/Thor/build --config Release --target install
+      run: cmake --build "$GITHUB_WORKSPACE/Thor/build" --config Release --target install
 
     - name: SmallGameFramework - Configure CMake
-      shell: bash
-      run: cmake -S $GITHUB_WORKSPACE -B $GITHUB_WORKSPACE/build -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/install -DCMAKE_VERBOSE_MAKEFILE=ON -DSFML_DIR=$GITHUB_WORKSPACE/SFML/install/lib/cmake/SFML -DTHOR_ROOT=$GITHUB_WORKSPACE/Thor/install ${{matrix.platform.flags}} ${{matrix.config.flags}}
+      env:
+        CMAKE_FLAGS: ${{ matrix.platform.flags }} ${{ matrix.config.flags }}
+      run: cmake -S "$GITHUB_WORKSPACE" -B "$GITHUB_WORKSPACE/build" -DCMAKE_INSTALL_PREFIX="$GITHUB_WORKSPACE/install" -DCMAKE_VERBOSE_MAKEFILE=ON -DSFML_DIR="$GITHUB_WORKSPACE/SFML/install/lib/cmake/SFML" -DTHOR_ROOT="$GITHUB_WORKSPACE/Thor/install" $CMAKE_FLAGS
 
     - name: SmallGameFramework - Build
-      shell: bash
-      run: cmake --build $GITHUB_WORKSPACE/build --config Release --target install
+      run: cmake --build "$GITHUB_WORKSPACE/build" --config Release --target install
