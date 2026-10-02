@@ -23,3 +23,5 @@ private:
 
     std::map<Identifier, std::unique_ptr<Resource>> m_resourceMap;
 };
+
+#include "ResourceHolder.inl"
